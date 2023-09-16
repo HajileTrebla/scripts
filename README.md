@@ -5,3 +5,4 @@ Dependencies:
     - Pytube
     - Pandas
     - Openpyxl
+    - Tabulate
