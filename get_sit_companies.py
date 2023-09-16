@@ -24,22 +24,36 @@ def getCompanies(file):
         if row[0] not in companies:
             companies[row[0]] = row[1]
         continue
+    companies = dict(sorted(companies.items()))
     return companies
 
-def outText(data):
+def getCount(file):
+    count = {}
+    for row in file:
+        if row[0] not in count:
+            count[row[0]] = 0
+        count[row[0]] += 1
+        continue
+    count = dict(sorted(count.items(), key=lambda x:x[1], reverse=True))
+    return count
+
+def outText(data, filename='SIT.txt'):
     out = data.items()
     data = out
-    with open('SIT.txt', 'w') as f:
+    with open(filename, 'w') as f:
         f.write('SIT Companies (2022)\n')
         f.write(tabulate(data))
-        #for key, value in data.items():
-        #    f.write('Name: {} \t\t Address: {}\n'.format(key,value))
 
 def main():
     filename = sys.argv[1]
     csvData = getCsv(filename)
     companies = getCompanies(csvData)
-    outText(companies)
+    count = getCount(csvData)
+    outText(companies, 'companies.txt')
+    outText(count, 'count.txt')
+    #log
+    print('Companies parsed successfully\n')
+    print('Number of Companies: {}'.format(len(companies)))
 
 if __name__ == '__main__':
     main()
